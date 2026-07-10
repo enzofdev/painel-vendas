@@ -7,7 +7,7 @@
   <title>Rota Certa</title>
   <link rel="shortcut icon" href="favi/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="styles-extra.css?v=20260710-financeiro" />
+  <link rel="stylesheet" href="styles-extra.css?v=20260710-pagamentos" />
 </head>
 <body>
   <main class="app-shell">
@@ -61,6 +61,7 @@
       <div class="commission-card"><p>Você recebe neste mês</p><strong id="commissionThisMonth">R$ 0,00</strong><small id="commissionThisMonthText"></small></div>
       <div class="summary-grid financial-grid"><article class="metric"><span>Próximo dia 15</span><strong id="commissionNextMonth">R$ 0,00</strong><small>Boletos pagos neste mês</small></article><article class="metric accent"><span>Boletos em aberto</span><strong id="openInvoices">0</strong><small>Vendas aguardando pagamento</small></article></div>
       <div class="section-heading"><div><p class="eyebrow">BOLETOS</p><h2>Aguardando pagamento</h2></div></div><div id="invoiceList" class="card-list"></div>
+      <div class="section-heading"><div><p class="eyebrow">PAGAMENTOS CONFIRMADOS</p><h2>Boletos pagos por mês</h2></div></div><div id="paidInvoicesHistory" class="paid-invoice-groups"></div>
       <div class="section-heading"><div><p class="eyebrow">HISTÓRICO</p><h2>Meses anteriores</h2></div></div><div id="monthlyHistory" class="history-list"></div>
     </section>
 
@@ -86,6 +87,6 @@
   <dialog id="fuelDialog"><form id="fuelForm"><div class="modal-head"><div><p class="eyebrow">HODÔMETRO</p><h2>Registrar percurso</h2></div><button class="close" type="button" data-close="fuelDialog">×</button></div><label>Data<input id="fuelDate" type="date" required /></label><div class="form-grid"><label>KM ao sair de casa<input id="fuelStartKm" type="number" min="0" step="0.1" required placeholder="Ex.: 10235" /></label><label>KM ao chegar<input id="fuelEndKm" type="number" min="0" step="0.1" required placeholder="Ex.: 10278" /></label></div><p class="form-hint" id="fuelDistancePreview">Informe os dois valores para calcular a distância.</p><label>Observação <small>(opcional)</small><input id="fuelNotes" placeholder="Ex.: rota Praia Grande" /></label><button class="primary">Registrar percurso</button></form></dialog>
   <dialog id="paymentDialog"><form id="paymentForm"><input id="paymentVisitId" type="hidden" /><div class="modal-head"><div><p class="eyebrow">BOLETO PAGO</p><h2 id="paymentTitle">Confirmar pagamento</h2></div><button class="close" type="button" data-close="paymentDialog">×</button></div><label>Data em que o cliente pagou<input id="paymentDate" type="date" required /></label><p class="form-hint" id="paymentCommissionHint"></p><button class="primary">Confirmar pagamento</button></form></dialog>
 
-  <script src="clients-data.js?v=20260710-utf8"></script><script src="app.js?v=20260710-financeiro"></script>
+  <script src="clients-data.js?v=20260710-utf8"></script><script src="app.js?v=20260710-pagamentos"></script>
 </body>
 </html>
