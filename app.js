@@ -171,6 +171,7 @@ function renderRoutes() {
 function openVisit() {
   if (!state.clients.some(c => c.active !== false)) return;
   $('#visitForm').reset();
+  $('#visitClientSearch').value = '';
   fillClientSelect();
   $('#visitDate').value = iso(today);
   $('#visitClient').dispatchEvent(new Event('change'));
@@ -178,7 +179,15 @@ function openVisit() {
 }
 
 function fillClientSelect() {
-  $('#visitClient').innerHTML = state.clients.filter(c => c.active !== false).sort((a, b) => a.name.localeCompare(b.name)).map(c => `<option value="${c.id}">${safe(c.name)} — ${safe(c.city || '')}</option>`).join('');
+  const q = normalizeText($('#visitClientSearch')?.value || '');
+  const clients = state.clients.filter(c => {
+    const haystack = normalizeText([c.name, c.city, c.neighborhood, c.street].join(' '));
+    return c.active !== false && (!q || haystack.includes(q));
+  }).sort((a, b) => a.name.localeCompare(b.name));
+  $('#visitClient').innerHTML = clients.map(c => `<option value="${c.id}">${safe(c.name)} — ${safe(c.city || '')}</option>`).join('');
+  if (clients.length) $('#visitClient').value = clients[0].id;
+  $('#visitReturn').value = '';
+  $('#visitClient').dispatchEvent(new Event('change'));
 }
 
 function openClient(id = '') {
@@ -397,12 +406,15 @@ function switchTo(id) {
 
 document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => switchTo(b.dataset.go));
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => $('#' + b.dataset.close).close());
-$('#addQuick').onclick = openVisit;
+$('#addQuick').onclick = () => $('#quickDialog').showModal();
+$('#quickVisit').onclick = () => { $('#quickDialog').close(); openVisit(); };
+$('#quickClient').onclick = () => { $('#quickDialog').close(); openClient(); };
 $('#newClient').onclick = () => openClient();
 $('#editGoal').onclick = () => { $('#monthlyGoal').value = state.settings.goal || ''; $('#commissionRate').value = state.settings.commissionRate || ''; $('#fuelPrice').value = state.settings.fuelPrice || ''; $('#kmPerLiter').value = state.settings.kmPerLiter || ''; $('#settingsDialog').showModal(); };
 $('#addFuelLog').onclick = () => { $('#fuelForm').reset(); $('#fuelDate').value = iso(today); $('#fuelDialog').showModal(); };
 $('#clientSearch').oninput = renderClients;
 $('#clientStatusFilter').onchange = renderClients;
+$('#visitClientSearch').oninput = fillClientSelect;
 
 $('#settingsForm').onsubmit = e => { e.preventDefault(); state.settings = { goal: Number($('#monthlyGoal').value || 0), commissionRate: Number($('#commissionRate').value || 0), fuelPrice: Number($('#fuelPrice').value || 0), kmPerLiter: Number($('#kmPerLiter').value || 1) }; save(); $('#settingsDialog').close(); render(); };
 $('#fuelForm').onsubmit = e => { e.preventDefault(); state.fuelLogs.push({ id: crypto.randomUUID(), date: $('#fuelDate').value, km: Number($('#fuelKm').value), notes: $('#fuelNotes').value.trim() }); save(); $('#fuelDialog').close(); render(); };
