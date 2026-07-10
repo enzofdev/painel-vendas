@@ -4,16 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#075f4f" />
-  <title>Renanzinho ChupaOvinho</title>
-<link rel="shortcut icon" href="favi/favicon.ico" type="image/x-icon">
+  <title>Rota Certa</title>
+  <link rel="shortcut icon" href="favi/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="styles-extra.css?v=20260710-mobilefix" />
+  <link rel="stylesheet" href="styles-extra.css?v=20260710-modalfix" />
 </head>
 <body>
   <main class="app-shell">
     <header class="topbar">
       <div><p class="eyebrow">PAINEL DE VENDAS</p><h1>Rota Certa <span>•</span></h1></div>
-      <button class="icon-button" id="addQuick" aria-label="Registrar visita">+</button>
+      <button class="icon-button" id="addQuick" aria-label="Ação rápida">+</button>
     </header>
 
     <section class="greeting"><p>Olá! Vamos cuidar das suas visitas.</p><h2 id="todayLabel"></h2></section>
@@ -41,11 +41,7 @@
       <div class="section-heading"><div><p class="eyebrow">SUA CARTEIRA</p><h2>Clientes</h2></div><button class="text-button" id="newClient">+ Novo</button></div>
       <div class="client-toolbar">
         <input class="search" id="clientSearch" placeholder="Buscar cliente" />
-        <select id="clientStatusFilter" aria-label="Filtro de clientes">
-          <option value="active">Ativos</option>
-          <option value="inactive">Inativos</option>
-          <option value="all">Todos</option>
-        </select>
+        <select id="clientStatusFilter" aria-label="Filtro de clientes"><option value="active">Ativos</option><option value="inactive">Inativos</option><option value="all">Todos</option></select>
       </div>
       <div id="clientsList" class="card-list"></div>
     </section>
@@ -54,10 +50,7 @@
 
     <section class="screen" id="assistantScreen">
       <div class="section-heading"><div><p class="eyebrow">ASSISTENTE</p><h2>Comando por voz</h2></div></div>
-      <div class="voice-panel">
-        <button class="mic-button" id="voiceButton" type="button">🎙</button>
-        <div><strong id="voiceStatus">Toque no microfone e fale</strong><small>Ex.: “Visitei Mercado Primo, vendeu 850 reais, retornar em 15 dias.”</small></div>
-      </div>
+      <div class="voice-panel"><button class="mic-button" id="voiceButton" type="button">🎙</button><div><strong id="voiceStatus">Toque no microfone e fale</strong><small>Ex.: “Visitei Mercado Primo, vendeu 850 reais, retornar em 15 dias.”</small></div></div>
       <div id="chatMessages" class="chat-messages"></div>
       <form id="chatForm" class="chat-input"><input id="chatText" autocomplete="off" placeholder="Digite ou fale uma visita, venda ou retorno" /><button>Enviar</button></form>
     </section>
@@ -65,7 +58,9 @@
     <nav class="bottom-nav"><button class="nav-item active" data-go="homeScreen">⌂<span>Início</span></button><button class="nav-item" data-go="agendaScreen">▣<span>Agenda</span></button><button class="nav-item" data-go="routesScreen">⌖<span>Rotas</span></button><button class="nav-item" data-go="clientsScreen">♙<span>Clientes</span></button><button class="nav-item" data-go="assistantScreen">🎙<span>Voz</span></button><button class="nav-item" data-go="reportsScreen">▥<span>Dados</span></button></nav>
   </main>
 
-  <dialog id="visitDialog"><form id="visitForm"><div class="modal-head"><div><p class="eyebrow" id="visitKicker">NOVA VISITA</p><h2 id="visitTitle">Registrar visita</h2></div><button class="close" type="button" data-close="visitDialog">×</button></div><label>Cliente<select id="visitClient" required></select></label><label>Data da visita<input id="visitDate" type="date" required></label><label>Valor do pedido (R$)<input id="visitValue" type="number" min="0" step="0.01" placeholder="0,00" required></label><label>Observação<textarea id="visitNotes" placeholder="Como foi a conversa? O que ficou combinado?"></textarea></label><label>Motivo de não compra <small>(se não houve pedido)</small><input id="visitNoSale" placeholder="Ex.: preço, sem estoque, sem responsável" /></label><label>Próximo retorno<input id="visitReturn" type="date" required></label><button class="primary">Salvar visita</button></form></dialog>
+  <dialog id="quickDialog"><form method="dialog" class="quick-actions"><div class="modal-head"><div><p class="eyebrow">AÇÃO RÁPIDA</p><h2>O que deseja fazer?</h2></div><button class="close" type="button" data-close="quickDialog">×</button></div><button class="primary" type="button" id="quickVisit">Registrar visita</button><button class="secondary" type="button" id="quickClient">Cadastrar novo cliente</button></form></dialog>
+
+  <dialog id="visitDialog"><form id="visitForm"><div class="modal-head"><div><p class="eyebrow" id="visitKicker">NOVA VISITA</p><h2 id="visitTitle">Registrar visita</h2></div><button class="close" type="button" data-close="visitDialog">×</button></div><label>Buscar cliente<input id="visitClientSearch" placeholder="Digite parte do nome, cidade ou bairro" /></label><label>Cliente<select id="visitClient" required></select></label><label>Data da visita<input id="visitDate" type="date" required></label><label>Valor do pedido (R$)<input id="visitValue" type="number" min="0" step="0.01" placeholder="0,00" required></label><label>Observação<textarea id="visitNotes" placeholder="Como foi a conversa? O que ficou combinado?"></textarea></label><label>Motivo de não compra <small>(se não houve pedido)</small><input id="visitNoSale" placeholder="Ex.: preço, sem estoque, sem responsável" /></label><label>Próximo retorno<input id="visitReturn" type="date" required></label><button class="primary">Salvar visita</button></form></dialog>
 
   <dialog id="clientDialog">
     <form id="clientForm">
@@ -73,18 +68,9 @@
       <div class="modal-head"><div><p class="eyebrow" id="clientKicker">CLIENTE</p><h2 id="clientDialogTitle">Cadastrar cliente</h2></div><button class="close" type="button" data-close="clientDialog">×</button></div>
       <label>Nome do cliente<input id="clientName" required placeholder="Ex.: Mercado Modelo" /></label>
       <label>Telefone<input id="clientPhone" placeholder="(00) 00000-0000" /></label>
-      <div class="form-grid">
-        <label>Rua<input id="clientStreet" placeholder="Rua / Avenida" /></label>
-        <label>Número<input id="clientNumber" placeholder="Nº" /></label>
-      </div>
-      <div class="form-grid">
-        <label>Bairro<input id="clientNeighborhood" placeholder="Bairro" /></label>
-        <label>Cidade<input id="clientCity" placeholder="Cidade" /></label>
-      </div>
-      <div class="form-grid">
-        <label>Frequência<select id="clientFrequency"><option value="7">A cada 7 dias</option><option value="15">A cada 15 dias</option><option value="30">A cada 30 dias</option><option value="45">A cada 45 dias</option><option value="60">A cada 60 dias</option></select></label>
-        <label>Status<select id="clientActive"><option value="true">Ativo</option><option value="false">Inativo</option></select></label>
-      </div>
+      <div class="form-grid"><label>Rua<input id="clientStreet" placeholder="Rua / Avenida" /></label><label>Número<input id="clientNumber" placeholder="Nº" /></label></div>
+      <div class="form-grid"><label>Bairro<input id="clientNeighborhood" placeholder="Bairro" /></label><label>Cidade<input id="clientCity" placeholder="Cidade" /></label></div>
+      <div class="form-grid"><label>Frequência<select id="clientFrequency"><option value="7">A cada 7 dias</option><option value="15">A cada 15 dias</option><option value="30">A cada 30 dias</option><option value="45">A cada 45 dias</option><option value="60">A cada 60 dias</option></select></label><label>Status<select id="clientActive"><option value="true">Ativo</option><option value="false">Inativo</option></select></label></div>
       <div class="dialog-actions"><button class="secondary danger" id="deleteClient" type="button">Excluir</button><button class="primary">Salvar cliente</button></div>
     </form>
   </dialog>
@@ -92,6 +78,6 @@
   <dialog id="settingsDialog"><form id="settingsForm"><div class="modal-head"><div><p class="eyebrow">CONFIGURAÇÕES</p><h2>Meta e combustível</h2></div><button class="close" type="button" data-close="settingsDialog">×</button></div><label>Meta mensal de vendas (R$)<input id="monthlyGoal" type="number" min="0" step="100" placeholder="Ex.: 130000" /></label><label>Comissão média (%)<input id="commissionRate" type="number" min="0" step="0.1" placeholder="Ex.: 7" /></label><label>Preço do combustível (R$ por litro)<input id="fuelPrice" type="number" min="0" step="0.01" placeholder="Ex.: 6,70" /></label><label>Consumo médio do carro (km/L)<input id="kmPerLiter" type="number" min="1" step="0.1" placeholder="Ex.: 16" /></label><button class="primary">Salvar configurações</button></form></dialog>
   <dialog id="fuelDialog"><form id="fuelForm"><div class="modal-head"><div><p class="eyebrow">KM RODADOS</p><h2>Registrar quilometragem</h2></div><button class="close" type="button" data-close="fuelDialog">×</button></div><label>Data<input id="fuelDate" type="date" required /></label><label>Quilômetros rodados<input id="fuelKm" type="number" min="0.1" step="0.1" required placeholder="Ex.: 42,5" /></label><label>Observação <small>(opcional)</small><input id="fuelNotes" placeholder="Ex.: rota Praia Grande" /></label><button class="primary">Registrar quilometragem</button></form></dialog>
   <script src="clients-data.js?v=20260710-utf8"></script>
-  <script src="app.js?v=20260710-voice2"></script>
+  <script src="app.js?v=20260710-modalfix"></script>
 </body>
 </html>
