@@ -7,7 +7,7 @@
   <title>Rota Certa</title>
   <link rel="shortcut icon" href="favi/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="styles-extra.css?v=20260710-modalfix" />
+  <link rel="stylesheet" href="styles-extra.css?v=20260710-financeiro" />
 </head>
 <body>
   <main class="app-shell">
@@ -27,57 +27,65 @@
         <article class="metric accent"><span>Para hoje</span><strong id="todayReturns">0</strong></article>
       </div>
       <div class="section-heading"><div><p class="eyebrow">DESEMPENHO</p><h2>Vendas por cidade</h2></div></div><div id="cityChart" class="city-chart"></div>
-      <div class="section-heading"><div><p class="eyebrow">SUA AGENDA</p><h2>Próximos retornos</h2></div><button class="text-button" data-go="agendaScreen">Ver agenda</button></div>
+      <div class="section-heading"><div><p class="eyebrow">SUA AGENDA</p><h2>Próximas visitas</h2></div><button class="text-button" data-go="agendaScreen">Ver agenda</button></div>
       <div id="homeAgenda" class="card-list"></div>
-      <div class="section-heading"><div><p class="eyebrow">ATENÇÃO</p><h2>Retornos atrasados</h2></div></div>
+      <div class="section-heading"><div><p class="eyebrow">ATENÇÃO</p><h2>Visitas atrasadas</h2></div></div>
       <div id="overdueList" class="card-list"></div>
     </section>
 
-    <section class="screen" id="agendaScreen"><div class="section-heading"><div><p class="eyebrow">PLANEJAMENTO</p><h2>Agenda de retornos</h2></div></div><div id="agendaList" class="card-list"></div></section>
+    <section class="screen" id="agendaScreen">
+      <div class="section-heading"><div><p class="eyebrow">PLANEJAMENTO</p><h2>Clientes para visitar</h2></div></div>
+      <p class="screen-copy">Conclua a visita para registrar a venda; ou reagende sem mexer no histórico. Os clientes aparecem por prioridade e cidade.</p>
+      <div id="agendaCityFilters" class="city-filters"></div>
+      <div id="agendaList" class="agenda-groups"></div>
+    </section>
 
-    <section class="screen" id="routesScreen"><div class="section-heading"><div><p class="eyebrow">ROTEIRO INTELIGENTE</p><h2>Visitas por cidade</h2></div></div><p class="screen-copy">Agrupe seus clientes por cidade e anote a quilometragem do dia. O custo mensal será calculado automaticamente.</p><div class="fuel-log"><div><span>Quilometragem de hoje</span><strong id="monthKm">0 km no mês</strong></div><button id="addFuelLog">+ km</button></div><div class="fuel-kpis"><article><span>Combustível no mês</span><strong id="monthFuel">R$ 0,00</strong></article><article><span>Consumo estimado</span><strong id="monthLiters">0 L</strong></article></div><div id="cityFilters" class="city-filters"></div><div id="routeList" class="card-list"></div></section>
+    <section class="screen" id="routesScreen">
+      <div class="section-heading"><div><p class="eyebrow">ROTEIRO INTELIGENTE</p><h2>Visitas por cidade</h2></div></div>
+      <p class="screen-copy">Organize sua rota por cidade e registre a quilometragem pelo hodômetro do carro.</p>
+      <div class="fuel-log"><div><span>Quilometragem registrada</span><strong id="monthKm">0 km no mês</strong></div><button id="addFuelLog">Registrar rota</button></div>
+      <div class="fuel-kpis"><article><span>Combustível no mês</span><strong id="monthFuel">R$ 0,00</strong></article><article><span>Consumo estimado</span><strong id="monthLiters">0 L</strong></article></div>
+      <div id="cityFilters" class="city-filters"></div><div id="routeList" class="card-list"></div>
+    </section>
 
     <section class="screen" id="clientsScreen">
       <div class="section-heading"><div><p class="eyebrow">SUA CARTEIRA</p><h2>Clientes</h2></div><button class="text-button" id="newClient">+ Novo</button></div>
-      <div class="client-toolbar">
-        <input class="search" id="clientSearch" placeholder="Buscar cliente" />
-        <select id="clientStatusFilter" aria-label="Filtro de clientes"><option value="active">Ativos</option><option value="inactive">Inativos</option><option value="all">Todos</option></select>
-      </div>
+      <div class="client-toolbar"><input class="search" id="clientSearch" placeholder="Buscar cliente" /><select id="clientStatusFilter" aria-label="Filtro de clientes"><option value="active">Ativos</option><option value="inactive">Inativos</option><option value="all">Todos</option></select></div>
       <div id="clientsList" class="card-list"></div>
     </section>
 
     <section class="screen" id="reportsScreen"><div class="section-heading"><div><p class="eyebrow">ACOMPANHAMENTO</p><h2>Relatório mensal</h2></div></div><div id="reportMonth" class="report-month"></div><div class="summary-grid report-grid"><article class="metric"><span>Total vendido</span><strong id="reportSales"></strong></article><article class="metric commission"><span>Comissão estimada · 7%</span><strong id="reportCommission"></strong></article><article class="metric"><span>Pedidos</span><strong id="reportOrders"></strong></article><article class="metric"><span>Ticket médio</span><strong id="reportTicket"></strong></article></div><div class="status-grid"><article><strong id="no30">0</strong><span>sem compra 30 dias</span></article><article><strong id="no60">0</strong><span>sem compra 60 dias</span></article><article><strong id="no90">0</strong><span>sem compra 90 dias</span></article></div><div class="section-heading"><h2>Ranking de clientes</h2></div><div id="salesByClient" class="card-list"></div></section>
 
+    <section class="screen" id="historyScreen">
+      <div class="section-heading"><div><p class="eyebrow">FINANCEIRO</p><h2>Comissões e histórico</h2></div></div>
+      <div class="commission-card"><p>Você recebe neste mês</p><strong id="commissionThisMonth">R$ 0,00</strong><small id="commissionThisMonthText"></small></div>
+      <div class="summary-grid financial-grid"><article class="metric"><span>Próximo dia 15</span><strong id="commissionNextMonth">R$ 0,00</strong><small>Boletos pagos neste mês</small></article><article class="metric accent"><span>Boletos em aberto</span><strong id="openInvoices">0</strong><small>Vendas aguardando pagamento</small></article></div>
+      <div class="section-heading"><div><p class="eyebrow">BOLETOS</p><h2>Aguardando pagamento</h2></div></div><div id="invoiceList" class="card-list"></div>
+      <div class="section-heading"><div><p class="eyebrow">HISTÓRICO</p><h2>Meses anteriores</h2></div></div><div id="monthlyHistory" class="history-list"></div>
+    </section>
+
     <section class="screen" id="assistantScreen">
       <div class="section-heading"><div><p class="eyebrow">ASSISTENTE</p><h2>Comando por voz</h2></div></div>
       <div class="voice-panel"><button class="mic-button" id="voiceButton" type="button">🎙</button><div><strong id="voiceStatus">Toque no microfone e fale</strong><small>Ex.: “Visitei Mercado Primo, vendeu 850 reais, retornar em 15 dias.”</small></div></div>
-      <div id="chatMessages" class="chat-messages"></div>
-      <form id="chatForm" class="chat-input"><input id="chatText" autocomplete="off" placeholder="Digite ou fale uma visita, venda ou retorno" /><button>Enviar</button></form>
+      <div id="chatMessages" class="chat-messages"></div><form id="chatForm" class="chat-input"><input id="chatText" autocomplete="off" placeholder="Digite ou fale uma visita, venda ou retorno" /><button>Enviar</button></form>
     </section>
 
-    <nav class="bottom-nav"><button class="nav-item active" data-go="homeScreen">⌂<span>Início</span></button><button class="nav-item" data-go="agendaScreen">▣<span>Agenda</span></button><button class="nav-item" data-go="routesScreen">⌖<span>Rotas</span></button><button class="nav-item" data-go="clientsScreen">♙<span>Clientes</span></button><button class="nav-item" data-go="assistantScreen">🎙<span>Voz</span></button><button class="nav-item" data-go="reportsScreen">▥<span>Dados</span></button></nav>
+    <nav class="bottom-nav"><button class="nav-item active" data-go="homeScreen">⌂<span>Início</span></button><button class="nav-item" data-go="agendaScreen">▣<span>Agenda</span></button><button class="nav-item" data-go="routesScreen">⌖<span>Rotas</span></button><button class="nav-item" data-go="clientsScreen">♙<span>Clientes</span></button><button class="nav-item" data-go="assistantScreen">🎙<span>Voz</span></button><button class="nav-item" data-go="reportsScreen">▥<span>Dados</span></button><button class="nav-item" data-go="historyScreen">◷<span>Histórico</span></button></nav>
   </main>
 
   <dialog id="quickDialog"><form method="dialog" class="quick-actions"><div class="modal-head"><div><p class="eyebrow">AÇÃO RÁPIDA</p><h2>O que deseja fazer?</h2></div><button class="close" type="button" data-close="quickDialog">×</button></div><button class="primary" type="button" id="quickVisit">Registrar visita</button><button class="secondary" type="button" id="quickClient">Cadastrar novo cliente</button></form></dialog>
 
-  <dialog id="visitDialog"><form id="visitForm"><div class="modal-head"><div><p class="eyebrow" id="visitKicker">NOVA VISITA</p><h2 id="visitTitle">Registrar visita</h2></div><button class="close" type="button" data-close="visitDialog">×</button></div><label>Buscar cliente<input id="visitClientSearch" placeholder="Digite parte do nome, cidade ou bairro" /></label><label>Cliente<select id="visitClient" required></select></label><label>Data da visita<input id="visitDate" type="date" required></label><label>Valor do pedido (R$)<input id="visitValue" type="number" min="0" step="0.01" placeholder="0,00" required></label><label>Observação<textarea id="visitNotes" placeholder="Como foi a conversa? O que ficou combinado?"></textarea></label><label>Motivo de não compra <small>(se não houve pedido)</small><input id="visitNoSale" placeholder="Ex.: preço, sem estoque, sem responsável" /></label><label>Próximo retorno<input id="visitReturn" type="date" required></label><button class="primary">Salvar visita</button></form></dialog>
+  <dialog id="visitDialog"><form id="visitForm"><input id="visitAppointmentId" type="hidden" /><div class="modal-head"><div><p class="eyebrow" id="visitKicker">CONCLUIR VISITA</p><h2 id="visitTitle">Registrar resultado</h2></div><button class="close" type="button" data-close="visitDialog">×</button></div><label id="visitSearchField">Buscar cliente<input id="visitClientSearch" placeholder="Digite parte do nome, cidade ou bairro" /></label><label>Cliente<select id="visitClient" required></select></label><label>Data da visita<input id="visitDate" type="date" required></label><label>Valor do pedido (R$)<input id="visitValue" type="number" min="0" step="0.01" placeholder="0,00" required /></label><label>Prazo do boleto<select id="visitBoletoDays"><option value="9">9 dias</option><option value="16">16 dias</option><option value="30" selected>30 dias</option></select></label><label>Observação<textarea id="visitNotes" placeholder="Como foi a conversa? O que ficou combinado?"></textarea></label><label>Motivo de não compra <small>(se não houve pedido)</small><input id="visitNoSale" placeholder="Ex.: preço, sem estoque, sem responsável" /></label><label>Próxima visita<input id="visitReturn" type="date" required /></label><button class="primary">Concluir e agendar próxima</button></form></dialog>
 
-  <dialog id="clientDialog">
-    <form id="clientForm">
-      <input id="clientId" type="hidden" />
-      <div class="modal-head"><div><p class="eyebrow" id="clientKicker">CLIENTE</p><h2 id="clientDialogTitle">Cadastrar cliente</h2></div><button class="close" type="button" data-close="clientDialog">×</button></div>
-      <label>Nome do cliente<input id="clientName" required placeholder="Ex.: Mercado Modelo" /></label>
-      <label>Telefone<input id="clientPhone" placeholder="(00) 00000-0000" /></label>
-      <div class="form-grid"><label>Rua<input id="clientStreet" placeholder="Rua / Avenida" /></label><label>Número<input id="clientNumber" placeholder="Nº" /></label></div>
-      <div class="form-grid"><label>Bairro<input id="clientNeighborhood" placeholder="Bairro" /></label><label>Cidade<input id="clientCity" placeholder="Cidade" /></label></div>
-      <div class="form-grid"><label>Frequência<select id="clientFrequency"><option value="7">A cada 7 dias</option><option value="15">A cada 15 dias</option><option value="30">A cada 30 dias</option><option value="45">A cada 45 dias</option><option value="60">A cada 60 dias</option></select></label><label>Status<select id="clientActive"><option value="true">Ativo</option><option value="false">Inativo</option></select></label></div>
-      <div class="dialog-actions"><button class="secondary danger" id="deleteClient" type="button">Excluir</button><button class="primary">Salvar cliente</button></div>
-    </form>
-  </dialog>
+  <dialog id="rescheduleDialog"><form id="rescheduleForm"><input id="rescheduleAppointmentId" type="hidden" /><div class="modal-head"><div><p class="eyebrow">REAGENDAR</p><h2 id="rescheduleTitle">Alterar visita</h2></div><button class="close" type="button" data-close="rescheduleDialog">×</button></div><label>Nova data da visita<input id="rescheduleDate" type="date" required /></label><label>Observação <small>(opcional)</small><input id="rescheduleNotes" placeholder="Ex.: cliente pediu para voltar depois" /></label><button class="primary">Salvar novo agendamento</button></form></dialog>
+
+  <dialog id="clientDialog"><form id="clientForm"><input id="clientId" type="hidden" /><div class="modal-head"><div><p class="eyebrow" id="clientKicker">CLIENTE</p><h2 id="clientDialogTitle">Cadastrar cliente</h2></div><button class="close" type="button" data-close="clientDialog">×</button></div><label>Nome do cliente<input id="clientName" required placeholder="Ex.: Mercado Modelo" /></label><label>Telefone<input id="clientPhone" placeholder="(00) 00000-0000" /></label><div class="form-grid"><label>Rua<input id="clientStreet" placeholder="Rua / Avenida" /></label><label>Número<input id="clientNumber" placeholder="Nº" /></label></div><div class="form-grid"><label>Bairro<input id="clientNeighborhood" placeholder="Bairro" /></label><label>Cidade<input id="clientCity" placeholder="Cidade" /></label></div><div class="form-grid"><label>Frequência<select id="clientFrequency"><option value="7">A cada 7 dias</option><option value="15">A cada 15 dias</option><option value="30">A cada 30 dias</option><option value="45">A cada 45 dias</option><option value="60">A cada 60 dias</option></select></label><label>Status<select id="clientActive"><option value="true">Ativo</option><option value="false">Inativo</option></select></label></div><div class="dialog-actions"><button class="secondary danger" id="deleteClient" type="button">Excluir</button><button class="primary">Salvar cliente</button></div></form></dialog>
 
   <dialog id="settingsDialog"><form id="settingsForm"><div class="modal-head"><div><p class="eyebrow">CONFIGURAÇÕES</p><h2>Meta e combustível</h2></div><button class="close" type="button" data-close="settingsDialog">×</button></div><label>Meta mensal de vendas (R$)<input id="monthlyGoal" type="number" min="0" step="100" placeholder="Ex.: 130000" /></label><label>Comissão média (%)<input id="commissionRate" type="number" min="0" step="0.1" placeholder="Ex.: 7" /></label><label>Preço do combustível (R$ por litro)<input id="fuelPrice" type="number" min="0" step="0.01" placeholder="Ex.: 6,70" /></label><label>Consumo médio do carro (km/L)<input id="kmPerLiter" type="number" min="1" step="0.1" placeholder="Ex.: 16" /></label><button class="primary">Salvar configurações</button></form></dialog>
-  <dialog id="fuelDialog"><form id="fuelForm"><div class="modal-head"><div><p class="eyebrow">KM RODADOS</p><h2>Registrar quilometragem</h2></div><button class="close" type="button" data-close="fuelDialog">×</button></div><label>Data<input id="fuelDate" type="date" required /></label><label>Quilômetros rodados<input id="fuelKm" type="number" min="0.1" step="0.1" required placeholder="Ex.: 42,5" /></label><label>Observação <small>(opcional)</small><input id="fuelNotes" placeholder="Ex.: rota Praia Grande" /></label><button class="primary">Registrar quilometragem</button></form></dialog>
-  <script src="clients-data.js?v=20260710-utf8"></script>
-  <script src="app.js?v=20260710-modalfix"></script>
+
+  <dialog id="fuelDialog"><form id="fuelForm"><div class="modal-head"><div><p class="eyebrow">HODÔMETRO</p><h2>Registrar percurso</h2></div><button class="close" type="button" data-close="fuelDialog">×</button></div><label>Data<input id="fuelDate" type="date" required /></label><div class="form-grid"><label>KM ao sair de casa<input id="fuelStartKm" type="number" min="0" step="0.1" required placeholder="Ex.: 10235" /></label><label>KM ao chegar<input id="fuelEndKm" type="number" min="0" step="0.1" required placeholder="Ex.: 10278" /></label></div><p class="form-hint" id="fuelDistancePreview">Informe os dois valores para calcular a distância.</p><label>Observação <small>(opcional)</small><input id="fuelNotes" placeholder="Ex.: rota Praia Grande" /></label><button class="primary">Registrar percurso</button></form></dialog>
+  <dialog id="paymentDialog"><form id="paymentForm"><input id="paymentVisitId" type="hidden" /><div class="modal-head"><div><p class="eyebrow">BOLETO PAGO</p><h2 id="paymentTitle">Confirmar pagamento</h2></div><button class="close" type="button" data-close="paymentDialog">×</button></div><label>Data em que o cliente pagou<input id="paymentDate" type="date" required /></label><p class="form-hint" id="paymentCommissionHint"></p><button class="primary">Confirmar pagamento</button></form></dialog>
+
+  <script src="clients-data.js?v=20260710-utf8"></script><script src="app.js?v=20260710-financeiro"></script>
 </body>
 </html>
