@@ -268,6 +268,21 @@ function historyCard(summary, isCurrent) {
   return `<article class="history-card ${isCurrent ? 'current' : ''}"><div><p>${isCurrent ? 'MÊS ATUAL' : 'MÊS FECHADO'}</p><strong>${safe(monthName(summary.month))}</strong><small>${money.format(summary.sales)} vendido de ${money.format(summary.goal)}</small></div><div class="history-values"><span>${summary.visits} visitas · ${summary.orders} pedidos</span><strong>${money.format(summary.commissionGenerated)}</strong><small>comissão para 15/${paymentMonth.split('-').reverse().join('/')}</small></div></article>`;
 }
 
+function paidInvoiceCard(visit) {
+  const currentClient = client(visit.clientId);
+  return `<article class="paid-invoice-card"><div class="paid-icon">✓</div><div class="card-main"><strong>${safe(currentClient?.name || 'Cliente')}</strong><small>Pago em ${dateFrom(visit.paidAt).toLocaleDateString('pt-BR')} · pedido de ${money.format(visit.value)}</small></div><div class="paid-invoice-value"><strong>${money.format(commissionForVisit(visit))}</strong><small>comissão</small></div></article>`;
+}
+
+function renderPaidInvoiceHistory() {
+  const paid = state.visits.filter((visit) => Number(visit.value) > 0 && visit.paidAt).sort((a, b) => b.paidAt.localeCompare(a.paidAt));
+  const grouped = paid.reduce((groups, visit) => { const key = keyFromDate(visit.paidAt); (groups[key] ||= []).push(visit); return groups; }, {});
+  $('#paidInvoicesHistory').innerHTML = paid.length ? Object.entries(grouped).sort(([a], [b]) => b.localeCompare(a)).map(([key, visits]) => {
+    const total = visits.reduce((sum, visit) => sum + Number(visit.value || 0), 0);
+    const commission = visits.reduce((sum, visit) => sum + commissionForVisit(visit), 0);
+    return `<section class="paid-month-group"><div class="paid-month-head"><div><h3>${safe(monthName(key))}</h3><small>${visits.length} boleto(s) pago(s) · ${money.format(total)}</small></div><strong>${money.format(commission)}</strong></div><div class="paid-invoice-list">${visits.map(paidInvoiceCard).join('')}</div></section>`;
+  }).join('') : empty('Os boletos confirmados como pagos aparecerão aqui, separados por mês.');
+}
+
 function renderHistory() {
   const currentKey = monthKey();
   const previousKey = previousMonthKey(currentKey);
@@ -280,6 +295,7 @@ function renderHistory() {
   $('#openInvoices').textContent = unpaid.length;
   $('#invoiceList').innerHTML = unpaid.length ? unpaid.map(invoiceCard).join('') : empty('Nenhum boleto pendente de confirmação.');
   document.querySelectorAll('[data-mark-paid]').forEach((button) => { button.onclick = () => openPayment(button.dataset.markPaid); });
+  renderPaidInvoiceHistory();
 
   const snapshotByMonth = new Map(state.monthlyHistory.map((item) => [item.month, item]));
   const months = new Set([currentKey, ...state.monthlyHistory.map((item) => item.month), ...state.visits.map((visit) => keyFromDate(visit.date)), ...state.visits.filter((visit) => visit.paidAt).map((visit) => keyFromDate(visit.paidAt)), ...state.fuelLogs.map((log) => keyFromDate(log.date))]);
